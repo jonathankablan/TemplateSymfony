@@ -17,8 +17,8 @@
 ---
 
 ```
-git clone git@github.com:Jonathanlight/africar-autoecole.git
-$ cd africar-autoecole
+git clone git@github.com:jonathankablan/TemplateSymfony.git
+$ cd TemplateSymfony
 
 # Utilisation de Symfony CLI
 symfony new --webapp symfony --version=6.4.*
