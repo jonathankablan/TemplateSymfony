@@ -1,4 +1,4 @@
-FROM php:8.1-apache
+FROM php:8.2-apache
 
 ARG TIMEZONE="Europe/Paris"
 ENV ACCEPT_EULA=Y
@@ -14,7 +14,6 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     libffi-dev \
     ca-certificates \
-    intl \
     nano
 
 # Apache SSL
@@ -28,8 +27,7 @@ RUN apt-get update && apt-get install -y \
     unixodbc-dev \
     freetds-dev \
     && apt-get update && apt-get install -y \
-    && docker-php-ext-install pdo pdo_mysql opcache \
-    && docker-php-ext-enable opcache
+    && docker-php-ext-install pdo pdo_mysql
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
