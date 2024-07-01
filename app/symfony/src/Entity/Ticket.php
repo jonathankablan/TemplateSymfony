@@ -27,6 +27,18 @@ class Ticket
     #[ORM\Column(nullable: true)]
     private ?int $complexity = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tickets')]
+    private ?Category $category = null;
+
+    #[ORM\ManyToOne(inversedBy: 'tickets')]
+    private ?Sprint $sprint = null;
+
+    #[ORM\ManyToOne(inversedBy: 'devOwner')]
+    private ?User $devOwner = null;
+
+    #[ORM\ManyToOne(inversedBy: 'adminOwner')]
+    private ?User $adminOwner = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +88,54 @@ class Ticket
     public function setComplexity(?int $complexity): static
     {
         $this->complexity = $complexity;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getSprint(): ?Sprint
+    {
+        return $this->sprint;
+    }
+
+    public function setSprint(?Sprint $sprint): static
+    {
+        $this->sprint = $sprint;
+
+        return $this;
+    }
+
+    public function getDevOwner(): ?User
+    {
+        return $this->devOwner;
+    }
+
+    public function setDevOwner(?User $devOwner): static
+    {
+        $this->devOwner = $devOwner;
+
+        return $this;
+    }
+
+    public function getAdminOwner(): ?User
+    {
+        return $this->adminOwner;
+    }
+
+    public function setAdminOwner(?User $adminOwner): static
+    {
+        $this->adminOwner = $adminOwner;
 
         return $this;
     }

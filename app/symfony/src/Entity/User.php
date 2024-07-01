@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Enum\RoleEnum;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -42,6 +44,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $number = null;
+
+    /**
+     * @var Collection<int, Sprint>
+     */
+    #[ORM\OneToMany(targetEntity: Sprint::class, mappedBy: 'user')]
+    private Collection $sprints;
+
+    /**
+     * @var Collection<int, Ticket>
+     */
+    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'devOwner')]
+    private Collection $devOwner;
+
+    /**
+     * @var Collection<int, Ticket>
+     */
+    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'adminOwner')]
+    private Collection $adminOwner;
+
+    public function __construct()
+    {
+        $this->sprints = new ArrayCollection();
+        $this->devOwner = new ArrayCollection();
+        $this->adminOwner = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -158,6 +185,96 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNumber(?string $number): static
     {
         $this->number = $number;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sprint>
+     */
+    public function getSprints(): Collection
+    {
+        return $this->sprints;
+    }
+
+    public function addSprint(Sprint $sprint): static
+    {
+        if (!$this->sprints->contains($sprint)) {
+            $this->sprints->add($sprint);
+            $sprint->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSprint(Sprint $sprint): static
+    {
+        if ($this->sprints->removeElement($sprint)) {
+            // set the owning side to null (unless already changed)
+            if ($sprint->getUser() === $this) {
+                $sprint->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ticket>
+     */
+    public function getDevOwner(): Collection
+    {
+        return $this->devOwner;
+    }
+
+    public function addDevOwner(Ticket $devOwner): static
+    {
+        if (!$this->devOwner->contains($devOwner)) {
+            $this->devOwner->add($devOwner);
+            $devOwner->setDevOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevOwner(Ticket $devOwner): static
+    {
+        if ($this->devOwner->removeElement($devOwner)) {
+            // set the owning side to null (unless already changed)
+            if ($devOwner->getDevOwner() === $this) {
+                $devOwner->setDevOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ticket>
+     */
+    public function getAdminOwner(): Collection
+    {
+        return $this->adminOwner;
+    }
+
+    public function addAdminOwner(Ticket $adminOwner): static
+    {
+        if (!$this->adminOwner->contains($adminOwner)) {
+            $this->adminOwner->add($adminOwner);
+            $adminOwner->setAdminOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdminOwner(Ticket $adminOwner): static
+    {
+        if ($this->adminOwner->removeElement($adminOwner)) {
+            // set the owning side to null (unless already changed)
+            if ($adminOwner->getAdminOwner() === $this) {
+                $adminOwner->setAdminOwner(null);
+            }
+        }
 
         return $this;
     }
