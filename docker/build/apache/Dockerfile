@@ -36,6 +36,15 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # RUN wget https://get.symfony.com/cli/installer -O - | bash
 # RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
+## Symfony cache folder
+RUN usermod -u 1000 www-data
+
+RUN mkdir /tmp/symfony/
+RUN mkdir /tmp/symfony/dev
+RUN chown -R www-data:www-data /tmp/symfony/dev
+RUN chown -R www-data:www-data /var/www/symfony
+RUN chmod -R 777 /tmp/symfony/dev
+
 # Set working directory
 WORKDIR /var/www/symfony
 
